@@ -1,0 +1,52 @@
+server:
+  # 服务端口
+  port: 8009
+
+spring:
+  # 服务名
+  application:
+    name: service-statistics
+
+  # 数据库连接
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/guli?serverTimezone=GMT%2B8
+    username: root
+    password: 20peng
+  cloud:
+    nacos:
+      discovery:
+        # nacos服务地址
+        server-addr: 127.0.0.1:8848
+  jackson:
+    time-zone: GMT+8
+    # 后台数据库中的时间是这种 "2019-11-11 16:26:26" 但是通过从数据库查出来后, 通过json格式返回至前端
+    # 时间就变成这样了 "2019-11-15T13:47:27.000+0000"
+    # 可以配置该属性来控制格式 spring.jackson.date-format
+    date-format: yyyy-MM-dd HH:mm:ss
+
+feign:
+  client:
+    config:
+      default:
+        # 在Feign客户端调用服务端的时候, 很容易出现连接超时的错误, 默认最长的请求时间为1s超过一秒就会报错
+        # feign.RetryableException: Read timed out executing DELETE
+        # 此处就是说 连接时间 和 啥时间 设置为 5 秒
+        connect-timeout: 5000
+        read-timeout: 5000
+  hystrix:
+    # 关闭 熔断机制 (hystrix熔断器)
+    enabled: false
+
+mybatis-plus:
+  # 指定mapper.xml的位置
+  mapper-locations: classpath:org/pjj/statistics/mapper/xml/*.xml
+  configuration:
+    # mybatis日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 设置日志级别
+#logging:
+#  level:
+#    root: warn
+

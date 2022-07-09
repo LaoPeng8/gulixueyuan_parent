@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.pjj.eduservice.mapper.EduCourseMapper">
+
+    <!-- 根据课程id查询 课程确认信息 -->
+    <select id="getPublishCourseInfo" parameterType="String" resultType="org.pjj.eduservice.entity.vo.CoursePublishVo">
+        select co.id, co.title, co.lesson_num, co.cover, co.price,
+        cd.description,
+        su.id, su.title as 'subjectOne',
+        su2.id, su2.title as 'subjectTwo',
+        te.id, te.name as 'teacherName'
+        from edu_course co
+        left join edu_subject su on co.subject_parent_id = su.id
+        left join edu_subject su2 on co.subject_id = su2.id
+        left join edu_teacher te on co.teacher_id = te.id
+        left join edu_course_description cd on co.id = cd.id
+        where co.id = #{courseId}
+    </select>
+
+    <!-- 查询课程详情 (包括课程详情表中的课程详情, 讲师表中的讲师) (课程表,课程描述表,讲师表) -->
+    <select id="getBaseCourseInfo" parameterType="String" resultType="org.pjj.eduservice.entity.frontvo.CourseWebVo">
+        select co.id, co.title, co.price, co.buy_count, co.view_count, co.lesson_num, co.cover,
+        cod.description,
+        te.id as 'teacher_id', te.name as 'teacher_name', te.avatar, te.career,
+        onesub.id as 'subject_level_one_id', onesub.title as 'subject_level_one',
+        twosub.id as 'subject_level_two_id', twosub.title as 'subject_level_two'
+        from edu_course co
+        left join edu_course_description cod on co.id = cod.id
+        left join edu_teacher te on co.teacher_id = te.id
+        left join edu_subject onesub on co.subject_parent_id = onesub.id
+        left join edu_subject twosub on co.subject_id = twosub.id
+        where co.id = #{courseId}
+    </select>
+
+</mapper>

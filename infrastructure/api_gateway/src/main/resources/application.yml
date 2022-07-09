@@ -1,0 +1,69 @@
+server:
+  port: 8222
+spring:
+  application:
+    name: service-gateway
+  cloud:
+    nacos:
+      discovery:
+        # nacos服务地址
+        server-addr: 127.0.0.1:8848
+    gateway:
+      discovery:
+        locator:
+          # 使用服务发现路由
+          enabled: true
+      routes:
+        # id 没有固定规则但要求唯一(建议使用服务名),
+        # uri 固定格式 lb://后面跟服务名
+        # Predicate 你可以理解为: 当满足这种条件后才会被转发, 如果是多个, 那就是都满足的情况下被转发。
+        #   可以配置 一个 -Path=xx, 一个 -Method=xx, 一个 -Host=xx, ... 详细见 https://www.cnblogs.com/snail90/p/11719573.html
+        - id: service-acl
+          uri: lb://service-acl
+          predicates:
+            - Path=/admin/acl/**
+        - id: service-edu
+          uri: lb://service-edu
+          predicates:
+            - Path=/eduservice/**
+        - id: service-comment
+          uri: lb://service-comment
+          predicates:
+            - Path=/educomment/**
+        - id: service-cms
+          uri: lb://service-cms
+          predicates:
+            - Path=/educms/**
+        - id: service-mail
+          uri: lb://service-mail
+          predicates:
+            - Path=/edumail/**
+        - id: service-order
+          uri: lb://service-order
+          predicates:
+            - Path=/eduorder/**
+        - id: service-oss
+          uri: lb://service-oss
+          predicates:
+            - Path=/eduoss/**
+        - id: service-statistics
+          uri: lb://service-statistics
+          predicates:
+            - Path=/edustatistics/**
+        - id: service-vod
+          uri: lb://service-vod
+          predicates:
+            - Path=/eduvod/**
+
+        # id 不能重复, 这里是使用的是 service-ucenter1 与 service-ucenter2
+        - id: service-ucenter1
+          uri: lb://service-ucenter
+          predicates:
+            # 每一个Predicate的使用，你可以理解为：当满足这种条件后才会被转发，如果是多个，那就是都满足的情况下被转发。
+            # 不能直接在predicates: 下直接写两个 -Path, 所以我这里分开写的, predicates:虽然是list但是不是配置多个-Path的
+            # 而是 可以配置 一个 -Path=xx, 一个 -Method=xx, 一个 -Host=xx, ...
+            - Path=/api/ucenter/wx/**
+        - id: service-ucenter2
+          uri: lb://service-ucenter
+          predicates:
+            - Path=/educenter/**

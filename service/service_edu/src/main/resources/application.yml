@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    # 使用开发环境
+    active: dev
+  # 服务名
+  application:
+    name: service-edu
+
+
+

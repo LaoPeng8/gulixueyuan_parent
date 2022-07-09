@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>service</artifactId>
+        <groupId>org.pjj.guli</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>service_oss</artifactId>
+
+    <dependencies>
+        <!-- 阿里云 oss 依赖 -->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+        </dependency>
+
+        <!-- 在JDK1.8之前，处理日期和时间的方式比较单一，Java中提供了Calendar来处理日期，但是过程较为繁琐，
+            但是在JDK1.8之后，Java更新了time包提供了LocalDate,LocalTime,LocalDateTime等日期时间类来处理较为复杂的关于日期和时间的业务逻辑的方法。
+
+            现在介绍Joda-Time日期时间工具类，该类库的开发者参与了JDK1.8中time包的开发 -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
+    </dependencies>
+
+
+</project>

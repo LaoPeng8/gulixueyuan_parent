@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>guli_parent</artifactId>
+        <groupId>org.pjj.guli</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>service</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>service_edu</module>
+        <module>service_oss</module>
+        <module>service_vod</module>
+        <module>service_cms</module>
+        <module>service_mail</module>
+        <module>service_ucenter</module>
+        <module>service_comment</module>
+        <module>service_order</module>
+        <module>service_statistics</module>
+        <module>service_acl</module>
+    </modules>
+
+    <dependencies>
+
+        <!-- service_base 模块中引入了
+            1. Swagger 以及 配置, 我们引入该模块, 相当于当前模块也配置了Swagger
+            2. 引入了 mybatis-plus 自动填充
+            3. 引入了全局异常处理-->
+        <dependency>
+            <groupId>org.pjj.guli</groupId>
+            <artifactId>service_base</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- common_utils 模块中 统一了返回结果类(即 统一返回指定格式的json) -->
+        <!-- 该依赖 在 service_base 中引入了, 而我们又引入了 service_base 所以 我们不需要在本pom.xml中再次引入service_base -->
+<!--        <dependency>-->
+<!--            <groupId>org.pjj.guli</groupId>-->
+<!--            <artifactId>common_utils</artifactId>-->
+<!--            <version>1.0-SNAPSHOT</version>-->
+<!--        </dependency>-->
+
+
+
+<!-- 暂时先将 SpringCloud 相关的依赖注掉, 暂时用不到, 如果注入了依赖 没有配置就会报红 -->
+        <!-- ribbon 负载均衡 通过 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+        </dependency>
+
+        <!--hystrix依赖，主要是用  @HystrixCommand (SpringCloud的组件 可以配置 服务熔断 服务降级 ...) -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+        </dependency>
+
+        <!--服务注册 (之前使用过 eureka 来进行服务注册   这个nacos也是服务注册应该都差不多) -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <!--服务调用  () -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!--mybatis-plus-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
+
+        <!--mysql-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <!-- velocity 模板引擎, Mybatis Plus 代码生成器需要 -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
+        </dependency>
+
+        <!--swagger-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+        </dependency>
+
+        <!--lombok用来简化实体类：需要安装lombok插件-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- 阿里的easyExcel重写了poi对07版Excel的解析 -->
+        <!-- 所以使用easyExcel还是需要引入 poi 的依赖的 -->
+        <!--xls-->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+
+        <!--httpclient-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <!--commons-io-->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <!--gson-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+
+        <!-- 放在service模块的pom.xml中 这样service下的子模块就可以使用了, 不需要再次配置了 -->
+        <!-- 项目打包(编译)时会将java中的*.xml文件也进行打包 --> <!-- Maven项目默认不会打包xml文件, 如果不配置的话 -->
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+    </build>
+
+</project>
